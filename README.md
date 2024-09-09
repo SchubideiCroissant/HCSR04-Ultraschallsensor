@@ -1,7 +1,8 @@
 # HCSR04-Ultraschallsensor
  Abstandsmessung mit Sensor mithilfe eines Rasperry Pico W
 
-Schaltplan:
+## Schaltplan
+```
 
  HC-SR04            Raspberry Pi Pico
 +---------+          +-----------------+
@@ -20,3 +21,4 @@ Schaltplan:
 |         |          |                 |
 +---------+          +-----------------+
 
+```
