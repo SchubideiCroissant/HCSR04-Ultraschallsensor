@@ -7,7 +7,7 @@ Der Buzzer ist optional, es wird über den Seriellen Monitor auch die gemessene 
 
 - **Raspberry Pi Pico W**: Mikrocontroller für die Steuerung.
 - **HC-SR04 Ultraschallsensor**: Misst die Entfernung des Objekts.
-- **Aktiever Buzzer**: Gibt akustische Signale aus, um auf die Distanz zu reagieren.
+- **Aktiver Buzzer**: Gibt akustische Signale aus, um auf die Distanz zu reagieren.
 - **Widerstände**: Zur Anpassung der Spannung des Echo-Pins (5V auf 3.3V).
 
 ## Schaltplan
