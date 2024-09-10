@@ -29,6 +29,7 @@
 // GPIO-Pins für den HC-SR04
 const uint TRIG_PIN = 0;
 const uint ECHO_PIN = 1;
+const uint SPEAKER_PIN = 16;
 
 void init_ultrasonic() {
     // Trig-Pin als Ausgang festlegen
@@ -38,6 +39,14 @@ void init_ultrasonic() {
     // Echo-Pin als Eingang festlegen
     gpio_init(ECHO_PIN);
     gpio_set_dir(ECHO_PIN, GPIO_IN);
+}
+void init_speaker() {
+    gpio_init(SPEAKER_PIN);
+    gpio_set_dir(SPEAKER_PIN, GPIO_OUT);
+    gpio_put(SPEAKER_PIN, false);
+
+
+
 }
 
 float measure_distance() {
@@ -70,8 +79,7 @@ float measure_distance() {
 }
 
 int main() {
-    //stdio_init_all();
-    stdio_usb_init();
+    stdio_init_all();
     printf("System gestartet!\n");
     init_ultrasonic();
 
