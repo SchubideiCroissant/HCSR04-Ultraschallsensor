@@ -43,7 +43,8 @@ pico_enable_stdio_usb(HCSR04-Ultraschallsensor 1)
 
 # Add the standard library to the build
 target_link_libraries(HCSR04-Ultraschallsensor
-        pico_stdlib)
+        pico_stdlib hardware_pwm
+        hardware_timer)
 
 # Add the standard include files to the build
 target_include_directories(HCSR04-Ultraschallsensor PRIVATE

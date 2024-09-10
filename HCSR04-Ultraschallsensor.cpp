@@ -1,5 +1,6 @@
 #include "pico/stdlib.h"
 #include <stdio.h>
+#include <cmath>
 
 /*
  * measure_distance() misst die Entfernung mithilfe des HC-SR04 Ultraschallsensors.
@@ -30,6 +31,8 @@
 const uint TRIG_PIN = 0;
 const uint ECHO_PIN = 1;
 const uint SPEAKER_PIN = 16;
+const float CONTINUOUS_BEEP_THRESHOLD = 3.0;
+const float MAX_DISTANCE = 70.0; // Distanz ab der Beep Töne kommen
 
 void init_ultrasonic() {
     // Trig-Pin als Ausgang festlegen
@@ -44,10 +47,40 @@ void init_speaker() {
     gpio_init(SPEAKER_PIN);
     gpio_set_dir(SPEAKER_PIN, GPIO_OUT);
     gpio_put(SPEAKER_PIN, false);
-
-
-
 }
+
+void play_sound(float distance, int wait_time){
+    if(distance < MAX_DISTANCE)
+    {
+    gpio_put(SPEAKER_PIN, true);
+    sleep_ms(50);  // Piepen für 100 ms (oder anpassbar)
+    if(wait_time != 0) gpio_put(SPEAKER_PIN, false);
+    // Wartezeit nach dem Piepen
+    sleep_ms(wait_time);
+    }
+}
+
+int calculate_wait_time(float distance) {
+    // Definiere minimale und maximale Wartezeit
+    const int min_wait_time = 5;   // Minimale Wartezeit z.B. 10 ms
+    const int max_wait_time = 800; // Maximale Wartezeit z.B. 1000 ms
+
+    // Wenn das Objekt extrem nah ist (z.B. < 3 cm), gib 0 zurück für durchgängigen Piepton
+    if (distance <= CONTINUOUS_BEEP_THRESHOLD) {
+        return 0; // Durchgehender Piepton
+    }
+
+    // Berechne die Wartezeit basierend auf der Distanz
+    int wait_time = min_wait_time + (int)((max_wait_time - min_wait_time) * (distance / MAX_DISTANCE));
+
+    // Sicherstellen, dass die Wartezeit innerhalb der definierten Grenzen bleibt
+    if (wait_time < min_wait_time) wait_time = min_wait_time;
+    if (wait_time > max_wait_time) wait_time = max_wait_time;
+
+    return wait_time;
+}
+
+
 
 float measure_distance() {
     // Triggersignal senden (10 µs HIGH)
@@ -82,10 +115,12 @@ int main() {
     stdio_init_all();
     printf("System gestartet!\n");
     init_ultrasonic();
+    init_speaker();
 
     while (true) {
         float distance = measure_distance();
         printf("Entfernung: %.2f cm\n", distance);
-        sleep_ms(1000);  // Eine Sekunde warten
+        play_sound(distance, calculate_wait_time(distance));
+        sleep_ms(100);  // kurze Wartezeit
     }
 }
